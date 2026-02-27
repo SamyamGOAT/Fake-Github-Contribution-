@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>username - Overview</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #0d1117;
+      --bg-canvas-inset: #010409;
+      --bg-default: #0d1117;
+      --bg-muted: #161b22;
+      --bg-subtle: #161b22;
+      --border-default: #30363d;
+      --border-muted: #21262d;
+      --fg-default: #e6edf3;
+      --fg-muted: #7d8590;
+      --fg-subtle: #7d8590;
+      --accent-fg: #2f81f7;
+      --accent-emphasis: #1f6feb;
+      --btn-bg: #21262d;
+      --btn-border: #30363d;
+      --btn-hover-bg: #30363d;
+      --success-fg: #3fb950;
+      --level-0: #161b22;
+      --level-1: #0e4429;
+      --level-2: #006d32;
+      --level-3: #26a641;
+      --level-4: #39d353;
+      --timeline-bg: #161b22;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      background: var(--bg-canvas);
+      color: var(--fg-default);
+      line-height: 1.5;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    a {
+      color: var(--accent-fg);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Header */
+    .gh-header {
+      background: var(--bg-muted);
+      border-bottom: 1px solid var(--border-default);
+      padding: 16px 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .gh-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gh-logo {
+      color: var(--fg-default);
+    }
+
+    .gh-logo:hover {
+      text-decoration: none;
+    }
+
+    .gh-search {
+      flex: 1;
+      max-width: 768px;
+      position: relative;
+    }
+
+    .gh-search input {
+      width: 100%;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 5px 12px;
+      color: var(--fg-default);
+      font-size: 14px;
+      outline: none;
+    }
+
+    .gh-search input:focus {
+      border-color: var(--accent-emphasis);
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.3);
+    }
+
+    .gh-search input::placeholder {
+      color: var(--fg-muted);
+    }
+
+    .gh-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .gh-nav a {
+      color: var(--fg-default);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 8px;
+    }
+
+    .gh-nav a:hover {
+      text-decoration: none;
+      opacity: 0.8;
+    }
+
+    .gh-notif {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+
+    .gh-notif:hover {
+      background: var(--btn-hover-bg);
+    }
+
+    .gh-avatar-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--level-2), var(--level-4));
+      cursor: pointer;
+    }
+
+    /* Main Layout */
+    .gh-main {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      display: grid;
+      grid-template-columns: 296px 1fr;
+      gap: 24px;
+    }
+
+    /* Profile Sidebar */
+    .gh-profile-sidebar {
+      position: sticky;
+      top: 80px;
+    }
+
+    .gh-profile-avatar {
+      width: 296px;
+      height: 296px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--level-2), var(--level-4));
+      border: 1px solid var(--border-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gh-profile-avatar svg {
+      width: 140px;
+      height: 140px;
+      color: var(--fg-muted);
+    }
+
+    .gh-profile-name {
+      font-size: 24px;
+      font-weight: 600;
+      margin-top: 16px;
+      line-height: 1.25;
+    }
+
+    .gh-profile-username {
+      font-size: 20px;
+      font-weight: 300;
+      color: var(--fg-muted);
+      line-height: 1.25;
+    }
+
+    .gh-profile-bio {
+      margin-top: 8px;
+      color: var(--fg-default);
+    }
+
+    .gh-profile-btn {
+      width: 100%;
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      padding: 5px 16px;
+      color: var(--fg-default);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    .gh-profile-btn:hover {
+      background: var(--btn-hover-bg);
+    }
+
+    .gh-profile-stats {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gh-profile-stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--fg-muted);
+      font-size: 14px;
+    }
+
+    .gh-profile-stat svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .gh-profile-stat strong {
+      color: var(--fg-default);
+    }
+
+    .gh-profile-following {
+      margin-top: 8px;
+      color: var(--fg-muted);
+    }
+
+    .gh-profile-following span {
+      color: var(--fg-default);
+    }
+
+    .gh-profile-info {
+      margin-top: 16px;
+      border-top: 1px solid var(--border-default);
+      padding-top: 16px;
+    }
+
+    .gh-profile-info-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--fg-muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .gh-profile-info-item svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Main Content */
+    .gh-profile-main {
+      min-width: 0;
+    }
+
+    .gh-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border-default);
+      margin-bottom: 16px;
+    }
+
+    .gh-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      color: var(--fg-muted);
+      font-size: 14px;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      cursor: pointer;
+    }
+
+    .gh-tab:hover {
+      text-decoration: none;
+      color: var(--fg-default);
+    }
+
+    .gh-tab.active {
+      color: var(--fg-default);
+      border-bottom-color: var(--accent-fg);
+    }
+
+    .gh-tab-counter {
+      background: var(--btn-bg);
+      padding: 0 8px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    /* Contribution Graph */
+    .gh-contribution {
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      background: var(--bg-default);
+      padding: 16px;
+    }
+
+    .gh-contribution-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .gh-contribution-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .gh-contribution-title a {
+      color: var(--fg-default);
+    }
+
+    .gh-contribution-total {
+      font-weight: 600;
+    }
+
+    .gh-contribution-settings {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      padding: 5px 16px;
+      color: var(--fg-default);
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .gh-contribution-settings:hover {
+      background: var(--btn-hover-bg);
+    }
+
+    /* Tools Panel */
+    .gh-tools {
+      background: var(--bg-muted);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gh-tools-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gh-tools-label {
+      font-size: 12px;
+      color: var(--fg-muted);
+    }
+
+    .gh-tools-levels {
+      display: flex;
+      gap: 4px;
+    }
+
+    .gh-tools-level {
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .gh-tools-level:hover {
+      transform: scale(1.2);
+    }
+
+    .gh-tools-level.selected {
+      border-color: var(--fg-default);
+    }
+
+    .gh-tools-level.l0 { background: var(--level-0); border-color: var(--border-default); }
+    .gh-tools-level.l1 { background: var(--level-1); }
+    .gh-tools-level.l2 { background: var(--level-2); }
+    .gh-tools-level.l3 { background: var(--level-3); }
+    .gh-tools-level.l4 { background: var(--level-4); }
+
+    .gh-tools-btn {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      padding: 4px 12px;
+      color: var(--fg-default);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .gh-tools-btn:hover {
+      background: var(--btn-hover-bg);
+    }
+
+    .gh-tools-brush {
+      display: flex;
+      gap: 4px;
+    }
+
+    .gh-tools-brush button {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--fg-muted);
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .gh-tools-brush button.active {
+      background: var(--accent-emphasis);
+      border-color: var(--accent-emphasis);
+      color: white;
+    }
+
+    /* Graph Container */
+    .gh-graph-container {
+      overflow-x: auto;
+      margin-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .gh-graph {
+      display: grid;
+      grid-template-columns: repeat(53, 11px);
+      gap: 3px;
+      min-width: max-content;
+    }
+
+    .gh-graph-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .gh-graph-weekdays {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-top: 20px;
+    }
+
+    .gh-graph-weekday {
+      font-size: 10px;
+      color: var(--fg-muted);
+      height: 11px;
+      line-height: 11px;
+    }
+
+    .gh-graph-months {
+      display: flex;
+      font-size: 10px;
+      color: var(--fg-muted);
+      margin-bottom: 8px;
+      position: relative;
+      height: 12px;
+    }
+
+    .gh-graph-month {
+      position: absolute;
+    }
+
+    .gh-cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: transform 0.1s ease, opacity 0.1s ease;
+    }
+
+    .gh-cell:hover {
+      transform: scale(1.3);
+      opacity: 0.9;
+    }
+
+    .gh-cell.c0 { background: var(--level-0); border: 1px solid var(--border-default); }
+    .gh-cell.c1 { background: var(--level-1); }
+    .gh-cell.c2 { background: var(--level-2); }
+    .gh-cell.c3 { background: var(--level-3); }
+    .gh-cell.c4 { background: var(--level-4); }
+
+    .gh-graph-legend {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--fg-muted);
+    }
+
+    .gh-graph-legend-cell {
+      width: 11px;
+      height: 11px;
+      border-radius: 2px;
+    }
+
+    /* Activity Cards */
+    .gh-activity {
+      margin-top: 24px;
+    }
+
+    .gh-activity-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gh-activity-list {
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+    }
+
+    .gh-activity-item {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-default);
+      display: flex;
+      gap: 12px;
+    }
+
+    .gh-activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .gh-activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+    }
+
+    .gh-activity-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .gh-activity-title {
+      font-weight: 600;
+      color: var(--accent-fg);
+    }
+
+    .gh-activity-desc {
+      color: var(--fg-muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .gh-activity-time {
+      font-size: 12px;
+      color: var(--fg-muted);
+      margin-top: 8px;
+    }
+
+    /* Tooltip */
+    .gh-tooltip {
+      position: fixed;
+      background: var(--bg-muted);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      pointer-events: none;
+      opacity: 0;
+      z-index: 1000;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(1, 4, 9, 0.85);
+    }
+
+    .gh-tooltip.visible {
+      opacity: 1;
+    }
+
+    /* Year Input */
+    .gh-year-input {
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      padding: 4px 8px;
+      color: var(--fg-default);
+      font-size: 12px;
+      width: 70px;
+      text-align: center;
+    }
+
+    .gh-year-input:focus {
+      outline: none;
+      border-color: var(--accent-emphasis);
+      box-shadow: 0 0 0 3px rgba(31, 111, 235, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      .gh-main {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .gh-profile-sidebar {
+        position: static;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .gh-profile-avatar {
+        width: 260px;
+        height: 260px;
+      }
+
+      .gh-profile-stats {
+        justify-content: center;
+      }
+
+      .gh-profile-following {
+        text-align: center;
+      }
+
+      .gh-profile-info {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+
+      .gh-profile-info-item {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .gh-header {
+        padding: 16px;
+      }
+
+      .gh-nav {
+        display: none;
+      }
+
+      .gh-profile-avatar {
+        width: 180px;
+        height: 180px;
+      }
+
+      .gh-tools {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="gh-header">
+    <div class="gh-header-inner">
+      <a href="#" class="gh-logo">
+        <svg height="32" viewBox="0 0 16 16" width="32" fill="currentColor">
+          <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+        </svg>
+      </a>
+      <div class="gh-search">
+        <input type="text" placeholder="Type / to search">
+      </div>
+      <nav class="gh-nav">
+        <a href="#">Pull requests</a>
+        <a href="#">Issues</a>
+        <a href="#">Codespaces</a>
+        <a href="#">Marketplace</a>
+        <a href="#">Explore</a>
+      </nav>
+      <div class="gh-notif">
+        <svg height="16" viewBox="0 0 16 16" width="16" fill="currentColor">
+          <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path>
+        </svg>
+      </div>
+      <div class="gh-avatar-small"></div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="gh-main">
+    <!-- Sidebar -->
+    <aside class="gh-profile-sidebar">
+      <div class="gh-profile-avatar">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+      </div>
+      <h1 class="gh-profile-name">Your Name</h1>
+      <h2 class="gh-profile-username">username</h2>
+      <p class="gh-profile-bio">Full-stack developer. Open source enthusiast.</p>
+      <button class="gh-profile-btn">Edit profile</button>
+      <div class="gh-profile-stats">
+        <span class="gh-profile-stat">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25Z"></path>
+          </svg>
+          <strong>42</strong> repositories
+        </span>
+        <span class="gh-profile-stat">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+          </svg>
+          <strong>1.2k</strong> stars
+        </span>
+        <span class="gh-profile-stat">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M8 16a2 2 0 0 0 1.985-1.75c.017-.137-.097-.25-.235-.25h-3.5c-.138 0-.252.113-.235.25A2 2 0 0 0 8 16ZM3 5a5 5 0 0 1 10 0v2.947c0 .05.015.098.042.139l1.703 2.555A1.519 1.519 0 0 1 13.482 13H2.518a1.516 1.516 0 0 1-1.263-2.36l1.703-2.554A.255.255 0 0 0 3 7.947Zm5-3.5A3.5 3.5 0 0 0 4.5 5v2.947c0 .346-.102.683-.294.97l-1.703 2.556a.017.017 0 0 0-.003.01l.001.006c0 .002.002.004.004.006l.006.004.007.001h10.964l.007-.001.006-.004.004-.006.001-.007a.017.017 0 0 0-.003-.01l-1.703-2.554a1.745 1.745 0 0 1-.294-.97V5A3.5 3.5 0 0 0 8 1.5Z"></path>
+          </svg>
+          <strong>128</strong> followers
+        </span>
+        <span class="gh-profile-stat">
+          <strong>256</strong> following
+        </span>
+      </div>
+      <div class="gh-profile-info">
+        <div class="gh-profile-info-item">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="m12.596 11.596-3.535 3.536a1.5 1.5 0 0 1-2.122 0l-3.535-3.536a6.5 6.5 0 1 1 9.192-9.193 6.5 6.5 0 0 1 0 9.193Zm-1.06-7.073a5 5 0 1 0-6.99 6.99L8 13.536l3.536-3.536a5 5 0 0 0 0-6.986ZM8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+          </svg>
+          <span>San Francisco, CA</span>
+        </div>
+        <div class="gh-profile-info-item">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7-6a6 6 0 0 0-3.6 10.8c.6-.4 1.6-.8 2.9-.8 1.6 0 2.5.6 2.9.8A6 6 0 0 0 8 2Z"></path>
+          </svg>
+          <a href="#">example.com</a>
+        </div>
+        <div class="gh-profile-info-item">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path>
+          </svg>
+          <span>@username</span>
+        </div>
+        <div class="gh-profile-info-item">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M7.217 3.553a3 3 0 0 1 5.566 0l.013.026a.75.75 0 0 0 .583.406l.027.004a3 3 0 0 1 2.439 4.155l-.014.03a.75.75 0 0 0 .122.695l.016.02a3 3 0 0 1-1.685 4.85.75.75 0 0 0-.582.407l-.014.026a3 3 0 0 1-5.566 0l-.013-.026a.75.75 0 0 0-.583-.406l-.027-.004a3 3 0 0 1-2.439-4.155l.014-.03a.75.75 0 0 0-.122-.695l-.016-.02a3 3 0 0 1 1.685-4.85.75.75 0 0 0 .582-.407ZM10 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"></path>
+          </svg>
+          <span>@acme-corp</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="gh-profile-main">
+      <!-- Tabs -->
+      <div class="gh-tabs">
+        <div class="gh-tab active">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M0 1.75A.75.75 0 0 1 .75 1h14.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 1.75ZM0 8a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H.75A.75.75 0 0 1 0 8Zm0 6.25a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H.75a.75.75 0 0 1-.75-.75Z"></path>
+          </svg>
+          Overview
+        </div>
+        <div class="gh-tab">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.25.25h-3.5a.25.25 0 0 1-.25-.25Z"></path>
+          </svg>
+          Repositories
+          <span class="gh-tab-counter">42</span>
+        </div>
+        <div class="gh-tab">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M8 8.414.636 15.778A1 1 0 0 1 0 15.121V1.88A1 1 0 0 1 .636.222l7.364 7.364-.636.636Zm.636 2.121 2.121-2.121.707.707-2.828 2.828-.707-.707Zm3.535-3.535L8 .636 9.414-.778l7.364 7.364-7.364 7.364L8 12.736l4.172-4.836Z"></path>
+          </svg>
+          Projects
+          <span class="gh-tab-counter">3</span>
+        </div>
+        <div class="gh-tab">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M4 1.75C4 .784 4.784 0 5.75 0h5.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v8.586A1.75 1.75 0 0 1 14.25 15H5.75A1.75 1.75 0 0 1 4 13.25ZM5.75 1.5a.25.25 0 0 0-.25.25v11.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V5.56l-2.31-2.31H5.75Z"></path>
+          </svg>
+          Packages
+        </div>
+        <div class="gh-tab">
+          <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+            <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8Zm7-6a6 6 0 0 1 5.918 5.058c-.092-.034-.211-.058-.334-.058H9.416a.749.749 0 0 0-.667.4A4.248 4.248 0 0 1 5.25 10.5H4.361a.749.749 0 0 0-.587.283 5.965 5.965 0 0 1-.932-1.783h1.458c.23 0 .44-.126.583-.333.1-.145.182-.307.254-.479a.749.749 0 0 1 .66-.479h2.36c.46 0 .849-.315.965-.757a.75.75 0 0 1 .066-.167l.05-.1A6 6 0 0 1 8 2Zm3.477 8.943a6 6 0 0 1-6.954 0 .749.749 0 0 1 .139-1.014.75.75 0 0 1 .949.053 4.5 4.5 0 0 0 5.778 0 .75.75 0 1 1 1.088 1.034v-.073ZM7.75 6a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"></path>
+          </svg>
+          Stars
+          <span class="gh-tab-counter">128</span>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div class="gh-tools">
+        <div class="gh-tools-section">
+          <span class="gh-tools-label">Paint:</span>
+          <div class="gh-tools-levels">
+            <div class="gh-tools-level l0 selected" data-level="0" title="No contributions"></div>
+            <div class="gh-tools-level l1" data-level="1" title="1-9 contributions"></div>
+            <div class="gh-tools-level l2" data-level="2" title="10-19 contributions"></div>
+            <div class="gh-tools-level l3" data-level="3" title="20-29 contributions"></div>
+            <div class="gh-tools-level l4" data-level="4" title="30+ contributions"></div>
+          </div>
+        </div>
+        <div class="gh-tools-section">
+          <span class="gh-tools-label">Brush:</span>
+          <div class="gh-tools-brush">
+            <button class="active" data-brush="1">1x1</button>
+            <button data-brush="2">2x2</button>
+            <button data-brush="3">3x3</button>
+          </div>
+        </div>
+        <div class="gh-tools-section">
+          <span class="gh-tools-label">Year:</span>
+          <input type="number" class="gh-year-input" id="yearInput" value="2026" min="2008" max="2030">
+        </div>
+        <div class="gh-tools-section" style="margin-left: auto;">
+          <button class="gh-tools-btn" id="randomFill">Random</button>
+          <button class="gh-tools-btn" id="clearAll">Clear</button>
+          <button class="gh-tools-btn" id="perfectYear">Max</button>
+        </div>
+      </div>
+
+      <!-- Contribution Graph -->
+      <div class="gh-contribution">
+        <div class="gh-contribution-header">
+          <span class="gh-contribution-title">
+            <span class="gh-contribution-total" id="totalContributions">0</span> contributions in <span id="yearDisplay">2026</span>
+          </span>
+          <select class="gh-contribution-settings" id="yearSelect">
+            <option value="2026" selected>2026</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
+          </select>
+        </div>
+        <div class="gh-graph-container">
+          <div class="gh-graph-wrapper">
+            <div class="gh-graph-weekdays">
+              <span class="gh-graph-weekday"></span>
+              <span class="gh-graph-weekday">Mon</span>
+              <span class="gh-graph-weekday"></span>
+              <span class="gh-graph-weekday">Wed</span>
+              <span class="gh-graph-weekday"></span>
+              <span class="gh-graph-weekday">Fri</span>
+              <span class="gh-graph-weekday"></span>
+            </div>
+            <div>
+              <div class="gh-graph-months" id="monthLabels"></div>
+              <div class="gh-graph" id="contributionGraph"></div>
+            </div>
+          </div>
+        </div>
+        <div class="gh-graph-legend">
+          Less
+          <div class="gh-graph-legend-cell c0"></div>
+          <div class="gh-graph-legend-cell c1"></div>
+          <div class="gh-graph-legend-cell c2"></div>
+          <div class="gh-graph-legend-cell c3"></div>
+          <div class="gh-graph-legend-cell c4"></div>
+          More
+        </div>
+      </div>
+
+      <!-- Activity -->
+      <div class="gh-activity">
+        <h3 class="gh-activity-header">
+          Contribution activity
+        </h3>
+        <div class="gh-activity-list">
+          <div class="gh-activity-item">
+            <div class="gh-activity-icon">
+              <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+                <path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"></path>
+              </svg>
+            </div>
+            <div class="gh-activity-content">
+              <a href="#" class="gh-activity-title">Created 5 repositories</a>
+              <p class="gh-activity-desc">awesome-project, cool-app, my-website, cli-tool, dotfiles</p>
+              <p class="gh-activity-time">Last month</p>
+            </div>
+          </div>
+          <div class="gh-activity-item">
+            <div class="gh-activity-icon">
+              <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+                <path d="M10.5 3.25a2.25 2.25 0 1 1 3 2.122V6A2.5 2.5 0 0 1 11 8.5H6a1 1 0 0 0-1 1v1.128a2.251 2.251 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.5 0v1.836A2.492 2.492 0 0 1 6 7h4a1 1 0 0 0 1-1v-.628A2.25 2.25 0 0 1 10.5 3.25Zm-8.5 4a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0ZM12.25 6a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0ZM6 11.25a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"></path>
+              </svg>
+            </div>
+            <div class="gh-activity-content">
+              <a href="#" class="gh-activity-title">Opened 12 pull requests</a>
+              <p class="gh-activity-desc">in 4 repositories</p>
+              <p class="gh-activity-time">2 months ago</p>
+            </div>
+          </div>
+          <div class="gh-activity-item">
+            <div class="gh-activity-icon">
+              <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
+                <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
+              </svg>
+            </div>
+            <div class="gh-activity-content">
+              <a href="#" class="gh-activity-title">Opened 8 issues</a>
+              <p class="gh-activity-desc">across 6 repositories</p>
+              <p class="gh-activity-time">3 months ago</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Tooltip -->
+  <div class="gh-tooltip" id="tooltip"></div>
+
+  <script>
+    // Initialize state
+    let contributionData = [];
+    let selectedLevel = 0;
+    let brushSize = 1;
+    let isPainting = false;
+    let currentYear = 2026;
+
+    // DOM elements
+    const graphEl = document.getElementById('contributionGraph');
+    const tooltipEl = document.getElementById('tooltip');
+    const monthLabelsEl = document.getElementById('monthLabels');
+    const totalContributionsEl = document.getElementById('totalContributions');
+    const yearDisplayEl = document.getElementById('yearDisplay');
+    const yearInputEl = document.getElementById('yearInput');
+    const yearSelectEl = document.getElementById('yearSelect');
+
+    // Months for labels
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    // Initialize
+    function init() {
+      generateContributionData();
+      renderGraph();
+      renderMonthLabels();
+      updateTotal();
+      setupEventListeners();
+    }
+
+    // Generate contribution data
+    function generateContributionData() {
+      contributionData = [];
+      for (let week = 0; week < 53; week++) {
+        for (let day = 0; day < 7; day++) {
+          contributionData.push({
+            week: week,
+            day: day,
+            level: 0,
+            date: getDateFromWeekDay(currentYear, week, day)
+          });
+        }
+      }
+    }
+
+    // Get date from week and day
+    function getDateFromWeekDay(year, week, day) {
+      const firstDay = new Date(year, 0, 1);
+      const daysOffset = (week * 7) + day - firstDay.getDay() + 1;
+      return new Date(year, 0, daysOffset);
+    }
+
+    // Render the graph
+    function renderGraph() {
+      graphEl.innerHTML = '';
+      contributionData.forEach((cell, index) => {
+        const cellEl = document.createElement('div');
+        cellEl.className = `gh-cell c${cell.level}`;
+        cellEl.dataset.index = index;
+        graphEl.appendChild(cellEl);
+      });
+    }
+
+    // Render month labels
+    function renderMonthLabels() {
+      monthLabelsEl.innerHTML = '';
+      const firstDayOfYear = new Date(currentYear, 0, 1);
+      
+      months.forEach((month, i) => {
+        const label = document.createElement('div');
+        label.className = 'gh-graph-month';
+        label.textContent = month;
+        
+        const monthStart = new Date(currentYear, i, 1);
+        const weekOffset = Math.floor((monthStart - firstDayOfYear) / (7 * 24 * 60 * 60 * 1000));
+        const leftPos = weekOffset * 14;
+        
+        label.style.left = `${Math.max(0, leftPos)}px`;
+        monthLabelsEl.appendChild(label);
+      });
+    }
+
+    // Update total contributions
+    function updateTotal() {
+      let total = 0;
+      contributionData.forEach(cell => {
+        total += getContributionsFromLevel(cell.level);
+      });
+      
+      // Animate
+      const current = parseInt(totalContributionsEl.textContent) || 0;
+      const diff = total - current;
+      const duration = 300;
+      const start = performance.now();
+      
+      function animate(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        totalContributionsEl.textContent = Math.round(current + diff * eased);
+        if (progress < 1) requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // Get contributions from level
+    function getContributionsFromLevel(level) {
+      const ranges = [0, 5, 15, 25, 35];
+      return ranges[level] || 0;
+    }
+
+    // Paint cells
+    function paintCells(centerIndex, level) {
+      const centerWeek = contributionData[centerIndex].week;
+      const centerDay = contributionData[centerIndex].day;
+
+      for (let dw = 0; dw < brushSize; dw++) {
+        for (let dd = 0; dd < brushSize; dd++) {
+          const targetWeek = centerWeek + dw - Math.floor(brushSize / 2);
+          const targetDay = centerDay + dd - Math.floor(brushSize / 2);
+          
+          if (targetWeek >= 0 && targetWeek < 53 && targetDay >= 0 && targetDay < 7) {
+            const targetIndex = contributionData.findIndex(c => c.week === targetWeek && c.day === targetDay);
+            if (targetIndex !== -1) {
+              contributionData[targetIndex].level = level;
+              const cellEl = graphEl.querySelector(`[data-index="${targetIndex}"]`);
+              if (cellEl) {
+                cellEl.className = `gh-cell c${level}`;
+              }
+            }
+          }
+        }
+      }
+      
+      updateTotal();
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Level selector
+      document.querySelectorAll('.gh-tools-level').forEach(option => {
+        option.addEventListener('click', () => {
+          document.querySelectorAll('.gh-tools-level').forEach(o => o.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedLevel = parseInt(option.dataset.level);
+        });
+      });
+
+      // Brush size
+      document.querySelectorAll('.gh-tools-brush button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.gh-tools-brush button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          brushSize = parseInt(btn.dataset.brush);
+        });
+      });
+
+      // Year input
+      yearInputEl.addEventListener('change', () => {
+        currentYear = parseInt(yearInputEl.value);
+        yearDisplayEl.textContent = currentYear;
+        yearSelectEl.value = currentYear;
+        generateContributionData();
+        renderGraph();
+        renderMonthLabels();
+        updateTotal();
+      });
+
+      // Year select
+      yearSelectEl.addEventListener('change', () => {
+        currentYear = parseInt(yearSelectEl.value);
+        yearDisplayEl.textContent = currentYear;
+        yearInputEl.value = currentYear;
+        generateContributionData();
+        renderGraph();
+        renderMonthLabels();
+        updateTotal();
+      });
+
+      // Graph painting
+      graphEl.addEventListener('mousedown', (e) => {
+        if (e.button === 0) {
+          isPainting = true;
+          const index = parseInt(e.target.dataset.index);
+          if (!isNaN(index)) {
+            paintCells(index, selectedLevel);
+          }
+        }
+      });
+
+      graphEl.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const index = parseInt(e.target.dataset.index);
+        if (!isNaN(index)) {
+          paintCells(index, 0);
+        }
+      });
+
+      graphEl.addEventListener('mouseover', (e) => {
+        const index = parseInt(e.target.dataset.index);
+        
+        if (!isNaN(index)) {
+          const cell = contributionData[index];
+          const contributions = getContributionsFromLevel(cell.level);
+          const dateStr = cell.date.toLocaleDateString('en-US', { 
+            weekday: 'short',
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+          });
+          
+          const contribText = contributions === 1 ? 'contribution' : 'contributions';
+          tooltipEl.innerHTML = `<strong>${contributions}</strong> ${contribText} on ${dateStr}`;
+          tooltipEl.classList.add('visible');
+        }
+        
+        if (isPainting && !isNaN(index)) {
+          paintCells(index, selectedLevel);
+        }
+      });
+
+      graphEl.addEventListener('mouseout', () => {
+        tooltipEl.classList.remove('visible');
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        tooltipEl.style.left = `${e.clientX + 10}px`;
+        tooltipEl.style.top = `${e.clientY + 10}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isPainting = false;
+      });
+
+      // Random fill
+      document.getElementById('randomFill').addEventListener('click', () => {
+        contributionData.forEach((cell) => {
+          const rand = Math.random();
+          let level;
+          if (rand < 0.4) level = 0;
+          else if (rand < 0.6) level = 1;
+          else if (rand < 0.8) level = 2;
+          else if (rand < 0.95) level = 3;
+          else level = 4;
+          
+          cell.level = level;
+        });
+        renderGraph();
+        updateTotal();
+      });
+
+      // Clear all
+      document.getElementById('clearAll').addEventListener('click', () => {
+        contributionData.forEach(cell => cell.level = 0);
+        renderGraph();
+        updateTotal();
+      });
+
+      // Perfect year
+      document.getElementById('perfectYear').addEventListener('click', () => {
+        contributionData.forEach(cell => cell.level = 4);
+        renderGraph();
+        updateTotal();
+      });
+    }
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
