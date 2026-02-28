@@ -2,8 +2,6 @@
 
 A high-fidelity, interactive single-page HTML application that replicates the GitHub user profile page. This tool allows users to customize their profile details, upload an avatar, and "paint" a fake contribution graph to visualize their ideal year in code.
 
-![GitHub Profile Preview](https://via.placeholder.com/800x400?text=Interactive+GitHub+Profile+Editor)
-
 ## 🚀 Features
 
 ### 1. Realistic UI Replica
