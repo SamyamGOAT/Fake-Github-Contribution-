@@ -391,8 +391,17 @@
       color: var(--fg-default);
     }
 
+    /* Secret Button Style */
     .gh-contribution-total {
       font-weight: 600;
+      cursor: pointer;
+      padding: 0 4px;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+    }
+
+    .gh-contribution-total:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .gh-contribution-settings {
@@ -428,6 +437,19 @@
       align-items: center;
       gap: 16px;
       flex-wrap: wrap;
+      transition: opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease;
+    }
+
+    /* Hidden state for tools */
+    .gh-tools.hidden {
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      border: none;
+      overflow: hidden;
     }
 
     .gh-tools-section {
@@ -851,7 +873,7 @@
         </div>
         <div class="gh-profile-info-item">
           <svg fill="currentColor" viewBox="0 0 16 16" width="16" height="16">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path>
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82-.44 1.1-.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"></path>
           </svg>
           <span>@username</span>
         </div>
@@ -903,8 +925,8 @@
         </div>
       </div>
 
-      <!-- Tools -->
-      <div class="gh-tools">
+      <!-- Tools (Hidden by default) -->
+      <div class="gh-tools hidden" id="toolsPanel">
         <div class="gh-tools-section">
           <span class="gh-tools-label">Paint:</span>
           <div class="gh-tools-levels">
@@ -938,7 +960,7 @@
       <div class="gh-contribution">
         <div class="gh-contribution-header">
           <span class="gh-contribution-title">
-            <span class="gh-contribution-total" id="totalContributions">0</span> contributions in <span id="yearDisplay">2026</span>
+            <span class="gh-contribution-total" id="totalContributions" title="Click to toggle editor">0</span> contributions in <span id="yearDisplay">2026</span>
           </span>
           <select class="gh-contribution-settings" id="yearSelect">
             <option value="2026" selected>2026</option>
@@ -1041,6 +1063,7 @@
     const yearDisplayEl = document.getElementById('yearDisplay');
     const yearInputEl = document.getElementById('yearInput');
     const yearSelectEl = document.getElementById('yearSelect');
+    const toolsPanel = document.getElementById('toolsPanel');
 
     // DOM elements - Avatar
     const avatarInput = document.getElementById('avatarInput');
@@ -1064,50 +1087,32 @@
     // ==================== AVATAR FUNCTIONALITY ====================
     
     function setupAvatarListeners() {
-      // Click on main avatar
-      avatarWrapper.addEventListener('click', () => {
-        avatarInput.click();
-      });
-
-      // Click on header avatar
-      headerAvatar.addEventListener('click', () => {
-        avatarInput.click();
-      });
-
-      // Handle file selection
+      avatarWrapper.addEventListener('click', () => avatarInput.click());
+      headerAvatar.addEventListener('click', () => avatarInput.click());
       avatarInput.addEventListener('change', handleAvatarUpload);
     }
 
     function handleAvatarUpload(event) {
       const file = event.target.files[0];
-      if (!file) return;
-
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
-        return;
-      }
-
-      // Read and display the image
+      if (!file || !file.type.startsWith('image/')) return;
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const imageData = e.target.result;
-        updateAvatars(imageData);
-      };
+      reader.onload = (e) => updateAvatars(e.target.result);
       reader.readAsDataURL(file);
     }
 
     function updateAvatars(imageData) {
-      // Update main profile avatar
       mainAvatar.innerHTML = `<img src="${imageData}" alt="Profile picture">`;
-      
-      // Update header avatar
       headerAvatar.innerHTML = `<img src="${imageData}" alt="Profile picture">`;
     }
 
+    // ==================== SECRET BUTTON ====================
+    
+    totalContributionsEl.addEventListener('click', () => {
+      toolsPanel.classList.toggle('hidden');
+    });
+
     // ==================== CONTRIBUTION GRAPH FUNCTIONALITY ====================
 
-    // Generate contribution data
     function generateContributionData() {
       contributionData = [];
       for (let week = 0; week < 53; week++) {
@@ -1122,14 +1127,12 @@
       }
     }
 
-    // Get date from week and day
     function getDateFromWeekDay(year, week, day) {
       const firstDay = new Date(year, 0, 1);
       const daysOffset = (week * 7) + day - firstDay.getDay() + 1;
       return new Date(year, 0, daysOffset);
     }
 
-    // Render the graph
     function renderGraph() {
       graphEl.innerHTML = '';
       contributionData.forEach((cell, index) => {
@@ -1140,33 +1143,24 @@
       });
     }
 
-    // Render month labels
     function renderMonthLabels() {
       monthLabelsEl.innerHTML = '';
       const firstDayOfYear = new Date(currentYear, 0, 1);
-      
       months.forEach((month, i) => {
         const label = document.createElement('div');
         label.className = 'gh-graph-month';
         label.textContent = month;
-        
         const monthStart = new Date(currentYear, i, 1);
         const weekOffset = Math.floor((monthStart - firstDayOfYear) / (7 * 24 * 60 * 60 * 1000));
-        const leftPos = weekOffset * 14;
-        
-        label.style.left = `${Math.max(0, leftPos)}px`;
+        label.style.left = `${Math.max(0, weekOffset * 14)}px`;
         monthLabelsEl.appendChild(label);
       });
     }
 
-    // Update total contributions
     function updateTotal() {
       let total = 0;
-      contributionData.forEach(cell => {
-        total += getContributionsFromLevel(cell.level);
-      });
+      contributionData.forEach(cell => total += getContributionsFromLevel(cell.level));
       
-      // Animate
       const current = parseInt(totalContributionsEl.textContent) || 0;
       const diff = total - current;
       const duration = 300;
@@ -1182,13 +1176,10 @@
       requestAnimationFrame(animate);
     }
 
-    // Get contributions from level
     function getContributionsFromLevel(level) {
-      const ranges = [0, 5, 15, 25, 35];
-      return ranges[level] || 0;
+      return [0, 5, 15, 25, 35][level] || 0;
     }
 
-    // Paint cells
     function paintCells(centerIndex, level) {
       const centerWeek = contributionData[centerIndex].week;
       const centerDay = contributionData[centerIndex].day;
@@ -1203,18 +1194,14 @@
             if (targetIndex !== -1) {
               contributionData[targetIndex].level = level;
               const cellEl = graphEl.querySelector(`[data-index="${targetIndex}"]`);
-              if (cellEl) {
-                cellEl.className = `gh-cell c${level}`;
-              }
+              if (cellEl) cellEl.className = `gh-cell c${level}`;
             }
           }
         }
       }
-      
       updateTotal();
     }
 
-    // Setup event listeners
     function setupEventListeners() {
       // Level selector
       document.querySelectorAll('.gh-tools-level').forEach(option => {
@@ -1261,81 +1248,56 @@
         if (e.button === 0) {
           isPainting = true;
           const index = parseInt(e.target.dataset.index);
-          if (!isNaN(index)) {
-            paintCells(index, selectedLevel);
-          }
+          if (!isNaN(index)) paintCells(index, selectedLevel);
         }
       });
 
       graphEl.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         const index = parseInt(e.target.dataset.index);
-        if (!isNaN(index)) {
-          paintCells(index, 0);
-        }
+        if (!isNaN(index)) paintCells(index, 0);
       });
 
       graphEl.addEventListener('mouseover', (e) => {
         const index = parseInt(e.target.dataset.index);
-        
         if (!isNaN(index)) {
           const cell = contributionData[index];
           const contributions = getContributionsFromLevel(cell.level);
           const dateStr = cell.date.toLocaleDateString('en-US', { 
-            weekday: 'short',
-            month: 'short', 
-            day: 'numeric', 
-            year: 'numeric' 
+            weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' 
           });
-          
           const contribText = contributions === 1 ? 'contribution' : 'contributions';
           tooltipEl.innerHTML = `<strong>${contributions}</strong> ${contribText} on ${dateStr}`;
           tooltipEl.classList.add('visible');
         }
-        
-        if (isPainting && !isNaN(index)) {
-          paintCells(index, selectedLevel);
-        }
+        if (isPainting && !isNaN(index)) paintCells(index, selectedLevel);
       });
 
-      graphEl.addEventListener('mouseout', () => {
-        tooltipEl.classList.remove('visible');
-      });
+      graphEl.addEventListener('mouseout', () => tooltipEl.classList.remove('visible'));
 
       document.addEventListener('mousemove', (e) => {
         tooltipEl.style.left = `${e.clientX + 10}px`;
         tooltipEl.style.top = `${e.clientY + 10}px`;
       });
 
-      document.addEventListener('mouseup', () => {
-        isPainting = false;
-      });
+      document.addEventListener('mouseup', () => isPainting = false);
 
-      // Random fill
+      // Action buttons
       document.getElementById('randomFill').addEventListener('click', () => {
         contributionData.forEach((cell) => {
           const rand = Math.random();
-          let level;
-          if (rand < 0.4) level = 0;
-          else if (rand < 0.6) level = 1;
-          else if (rand < 0.8) level = 2;
-          else if (rand < 0.95) level = 3;
-          else level = 4;
-          
-          cell.level = level;
+          cell.level = rand < 0.4 ? 0 : rand < 0.6 ? 1 : rand < 0.8 ? 2 : rand < 0.95 ? 3 : 4;
         });
         renderGraph();
         updateTotal();
       });
 
-      // Clear all
       document.getElementById('clearAll').addEventListener('click', () => {
         contributionData.forEach(cell => cell.level = 0);
         renderGraph();
         updateTotal();
       });
 
-      // Perfect year
       document.getElementById('perfectYear').addEventListener('click', () => {
         contributionData.forEach(cell => cell.level = 4);
         renderGraph();
