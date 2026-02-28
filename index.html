@@ -230,11 +230,36 @@
       opacity: 1;
     }
 
+    /* Editable Fields */
     .gh-profile-name {
       font-size: 24px;
       font-weight: 600;
       margin-top: 16px;
       line-height: 1.25;
+      cursor: pointer;
+      border: 1px solid transparent;
+      padding: 2px 6px;
+      margin-left: -6px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .gh-profile-name:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .gh-profile-name-input {
+      font-size: 24px;
+      font-weight: 600;
+      background: var(--bg-canvas);
+      border: 1px solid var(--accent-emphasis);
+      color: var(--fg-default);
+      padding: 2px 6px;
+      margin-left: -6px;
+      border-radius: 6px;
+      outline: none;
+      width: calc(100% + 12px);
+      font-family: inherit;
     }
 
     .gh-profile-username {
@@ -247,6 +272,30 @@
     .gh-profile-bio {
       margin-top: 8px;
       color: var(--fg-default);
+      cursor: pointer;
+      border: 1px solid transparent;
+      padding: 2px 6px;
+      margin-left: -6px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .gh-profile-bio:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .gh-profile-bio-input {
+      font-size: 14px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--accent-emphasis);
+      color: var(--fg-default);
+      padding: 4px 8px;
+      border-radius: 6px;
+      outline: none;
+      width: 100%;
+      font-family: inherit;
+      resize: none;
+      min-height: 60px;
     }
 
     .gh-profile-btn {
@@ -292,15 +341,6 @@
     }
 
     .gh-profile-stat strong {
-      color: var(--fg-default);
-    }
-
-    .gh-profile-following {
-      margin-top: 8px;
-      color: var(--fg-muted);
-    }
-
-    .gh-profile-following span {
       color: var(--fg-default);
     }
 
@@ -391,7 +431,6 @@
       color: var(--fg-default);
     }
 
-    /* Secret Button Style */
     .gh-contribution-total {
       font-weight: 600;
       cursor: pointer;
@@ -757,6 +796,16 @@
       .gh-profile-info-item {
         margin-top: 0;
       }
+      
+      .gh-profile-name, .gh-profile-bio {
+        margin-left: 0;
+        width: 100%;
+        text-align: center;
+      }
+      
+      .gh-profile-name-input {
+        text-align: center;
+      }
     }
 
     @media (max-width: 768px) {
@@ -831,9 +880,19 @@
         </div>
         <div class="gh-profile-avatar-overlay">Change profile picture</div>
       </div>
-      <h1 class="gh-profile-name">Your Name</h1>
+      
+      <!-- Editable Name -->
+      <div id="profileNameContainer">
+        <h1 class="gh-profile-name" id="profileName" title="Click to edit">Your Name</h1>
+      </div>
+
       <h2 class="gh-profile-username">username</h2>
-      <p class="gh-profile-bio">Full-stack developer. Open source enthusiast.</p>
+      
+      <!-- Editable Bio -->
+      <div id="profileBioContainer">
+        <p class="gh-profile-bio" id="profileBio" title="Click to edit">Full-stack developer. Open source enthusiast.</p>
+      </div>
+
       <button class="gh-profile-btn">Edit profile</button>
       <div class="gh-profile-stats">
         <span class="gh-profile-stat">
@@ -1055,7 +1114,7 @@
     let isPainting = false;
     let currentYear = 2026;
 
-    // DOM elements - Contribution graph
+    // DOM elements
     const graphEl = document.getElementById('contributionGraph');
     const tooltipEl = document.getElementById('tooltip');
     const monthLabelsEl = document.getElementById('monthLabels');
@@ -1071,6 +1130,10 @@
     const mainAvatar = document.getElementById('mainAvatar');
     const headerAvatar = document.getElementById('headerAvatar');
 
+    // DOM elements - Profile Info
+    const profileName = document.getElementById('profileName');
+    const profileBio = document.getElementById('profileBio');
+
     // Months for labels
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -1082,6 +1145,47 @@
       updateTotal();
       setupEventListeners();
       setupAvatarListeners();
+      setupEditableFields();
+    }
+
+    // ==================== EDITABLE FIELDS ====================
+
+    function setupEditableFields() {
+      // Make Name editable
+      profileName.addEventListener('click', () => makeEditable(profileName, 'input'));
+      
+      // Make Bio editable
+      profileBio.addEventListener('click', () => makeEditable(profileBio, 'textarea'));
+    }
+
+    function makeEditable(element, type) {
+      const currentText = element.textContent;
+      const input = document.createElement(type);
+      
+      input.value = currentText;
+      input.className = type === 'input' ? 'gh-profile-name-input' : 'gh-profile-bio-input';
+      
+      // Replace element content
+      element.innerHTML = '';
+      element.appendChild(input);
+      input.focus();
+      element.style.cursor = 'default';
+
+      // Save on blur
+      const saveChanges = () => {
+        element.textContent = input.value || currentText;
+        element.style.cursor = 'pointer';
+      };
+
+      input.addEventListener('blur', saveChanges);
+      
+      // Save on Enter (but allow Shift+Enter for textarea)
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && type === 'input') {
+          e.preventDefault();
+          input.blur(); // Triggers save
+        }
+      });
     }
 
     // ==================== AVATAR FUNCTIONALITY ====================
