@@ -73,5 +73,5 @@ This project is intended for **educational purposes** and **fun** only. It is a 
 
 ## 📄 License
 
-MIT License. Feel free to modify and distribute.
+You can use it wherever you want but strictly for educational purposes.
 ```
